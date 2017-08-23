@@ -1,0 +1,692 @@
+
+# ##############################################################################
+# WARPLab Reference Design
+# XPS Hardware Specification (system.mhs)
+# Copyright 2013 Mango Communications
+# Distributed under the WARP license  (http://warpproject.org/license)
+# Target Board:              Rice University - WARP Project WARP Kits (FPGA/Clock/Radio Boards) Rev FPGA 2.2 / Radio 1.4 / Clock 1.1
+# WARPLab version:           7.5.0
+# Family:                    virtex4
+# Device:                    XC4VFX100
+# Package:                   FF1517
+# Speed Grade:               -11
+# Processor number:          1
+# Processor 1:               ppc405_0
+# Processor clock frequency: 160.0
+# Bus clock frequency:       80.0
+# Debug Interface:           FPGA JTAG
+# ##############################################################################
+ PARAMETER VERSION = 2.1.0
+
+
+# ##############################################################################
+# Top Level Ports
+# ##############################################################################
+ PORT UserIO_LEDs = UserIO_LEDs, DIR = O, VEC = [0:7]
+ PORT UserIO_IOEx_SDA = UserIO_IOEx_SDA, DIR = O
+ PORT UserIO_IOEx_SCL = UserIO_IOEx_SCL, DIR = O
+ PORT UserIO_PB = UserIO_PB, DIR = I, VEC = [0:3]
+ PORT UserIO_DIPSW = UserIO_DIPSW, DIR = I, VEC = [0:3]
+ PORT rs232_db9_RX = rs232_db9_RX, DIR = I
+ PORT rs232_db9_TX = rs232_db9_TX, DIR = O
+ PORT rs232_usb_RX = rs232_usb_RX, DIR = I
+ PORT rs232_usb_TX = rs232_usb_TX, DIR = O
+ PORT ETH_TemacPhy_RST_n = ETH_TemacPhy_RST_n, DIR = O
+ PORT ETH_MII_TX_CLK = ETH_MII_TX_CLK, DIR = I
+ PORT ETH_GMII_TXD = ETH_GMII_TXD, DIR = O, VEC = [7:0]
+ PORT ETH_GMII_TX_EN = ETH_GMII_TX_EN, DIR = O
+ PORT ETH_GMII_TX_ER = ETH_GMII_TX_ER, DIR = O
+ PORT ETH_GMII_TX_CLK = ETH_GMII_TX_CLK, DIR = O
+ PORT ETH_GMII_RXD = ETH_GMII_RXD, DIR = I, VEC = [7:0]
+ PORT ETH_GMII_RX_DV = ETH_GMII_RX_DV, DIR = I
+ PORT ETH_GMII_RX_ER = ETH_GMII_RX_ER, DIR = I
+ PORT ETH_GMII_RX_CLK = ETH_GMII_RX_CLK, DIR = I
+ PORT ETH_MDC = ETH_MDC, DIR = O
+ PORT ETH_MDIO = ETH_MDIO, DIR = IO
+# Clock board config
+ PORT clk_board_config_sys_clk = clk_board_config_sys_clk, DIR = I
+ PORT clk_board_config_radio_dat_out = clk_board_config_radio_dat_out, DIR = O
+ PORT clk_board_config_radio_csb_out = clk_board_config_radio_csb_out, DIR = O
+ PORT clk_board_config_radio_en_out = clk_board_config_radio_en_out, DIR = O
+ PORT clk_board_config_radio_clk_out = clk_board_config_radio_clk_out, DIR = O
+ PORT clk_board_config_logic_dat_out = clk_board_config_logic_dat_out, DIR = O
+ PORT clk_board_config_logic_csb_out = clk_board_config_logic_csb_out, DIR = O
+ PORT clk_board_config_logic_en_out = clk_board_config_logic_en_out, DIR = O
+ PORT clk_board_config_logic_clk_out = clk_board_config_logic_clk_out, DIR = O
+# RFA transceiver and front-end (daughtercard slot 2)
+ PORT RFA_TxEn = RFA_TxEn, DIR = O
+ PORT RFA_RxEn = RFA_RxEn, DIR = O
+ PORT RFA_RxHP = RFA_RxHP, DIR = O
+ PORT RFA_SHDN = RFA_SHDN, DIR = O
+ PORT RFA_SPI_SCLK = RFA_SPI_SCLK, DIR = O
+ PORT RFA_SPI_MOSI = RFA_SPI_MOSI, DIR = O
+ PORT RFA_SPI_CSn = RFA_SPI_CSn, DIR = O
+ PORT RFA_B = RFA_B, DIR = O, VEC = [0:6]
+ PORT RFA_LD = RFA_LD, DIR = I
+ PORT RFA_PAEn_24 = RFA_PAEn_24, DIR = O
+ PORT RFA_PAEn_5 = RFA_PAEn_5, DIR = O
+ PORT RFA_AntSw = RFA_AntSw, DIR = O, VEC = [0:1]
+# R G Y
+ PORT RFA_LEDs = 0b0 & RFA_statLED_Tx & RFA_statLED_Rx, DIR = O, VEC = [0:2]
+ PORT RFA_DIPSW = RFA_DIPSW, DIR = I, VEC = [0:3]
+# RFB transceiver and front-end (daughtercard slot 3)
+ PORT RFB_TxEn = RFB_TxEn, DIR = O
+ PORT RFB_RxEn = RFB_RxEn, DIR = O
+ PORT RFB_RxHP = RFB_RxHP, DIR = O
+ PORT RFB_SHDN = RFB_SHDN, DIR = O
+ PORT RFB_SPI_SCLK = RFB_SPI_SCLK, DIR = O
+ PORT RFB_SPI_MOSI = RFB_SPI_MOSI, DIR = O
+ PORT RFB_SPI_CSn = RFB_SPI_CSn, DIR = O
+ PORT RFB_B = RFB_B, DIR = O, VEC = [0:6]
+ PORT RFB_LD = RFB_LD, DIR = I
+ PORT RFB_PAEn_24 = RFB_PAEn_24, DIR = O
+ PORT RFB_PAEn_5 = RFB_PAEn_5, DIR = O
+ PORT RFB_AntSw = RFB_AntSw, DIR = O, VEC = [0:1]
+ PORT RFB_LEDs = 0b0 & RFB_statLED_Tx & RFB_statLED_Rx, DIR = O, VEC = [0:2]
+ PORT RFB_DIPSW = RFB_DIPSW, DIR = I, VEC = [0:3]
+# RSSI ADCs
+ PORT RFA_RSSI_ADC_D = RFA_RSSI_ADC_D, DIR = I, VEC = [9:0]
+ PORT RFA_RSSI_ADC_CLK = RFA_RSSI_ADC_CLK, DIR = O
+ PORT RFA_RSSI_ADC_CLAMP = RFA_RSSI_ADC_CLAMP, DIR = O
+ PORT RFA_RSSI_ADC_HIZ = RFA_RSSI_ADC_HIZ, DIR = O
+ PORT RFA_RSSI_ADC_SLEEP = RFA_RSSI_ADC_SLEEP, DIR = O
+ PORT RFB_RSSI_ADC_D = RFB_RSSI_ADC_D, DIR = I, VEC = [9:0]
+ PORT RFB_RSSI_ADC_CLK = RFB_RSSI_ADC_CLK, DIR = O
+ PORT RFB_RSSI_ADC_CLAMP = RFB_RSSI_ADC_CLAMP, DIR = O
+ PORT RFB_RSSI_ADC_HIZ = RFB_RSSI_ADC_HIZ, DIR = O
+ PORT RFB_RSSI_ADC_SLEEP = RFB_RSSI_ADC_SLEEP, DIR = O
+# I/Q ADCs/DACs
+ PORT RFA_DAC_I = RFA_DAC_I, DIR = O, VEC = [15:0]
+ PORT RFA_DAC_Q = RFA_DAC_Q, DIR = O, VEC = [15:0]
+ PORT RFA_DAC_SPI_CSn = RFA_DAC_SPI_CSn, DIR = O
+ PORT RFA_DAC_SPI_SCLK = RFA_DAC_SPI_SCLK, DIR = O
+ PORT RFA_DAC_SPI_MOSI = RFA_DAC_SPI_MOSI, DIR = O
+ PORT RFA_DAC_SPI_MISO = RFA_DAC_SPI_MISO, DIR = I
+ PORT RFA_DAC_RESET = RFA_DAC_RESET, DIR = O
+ PORT RFA_DAC_PLLLOCK = RFA_DAC_PLLLOCK, DIR = I
+ PORT RFA_RX_ADC_I = RFA_RX_ADC_I, DIR = I, VEC = [13:0]
+ PORT RFA_RX_ADC_Q = RFA_RX_ADC_Q, DIR = I, VEC = [13:0]
+ PORT RFA_RX_ADC_I_OTR = RFA_RX_ADC_I_OTR, DIR = I
+ PORT RFA_RX_ADC_Q_OTR = RFA_RX_ADC_Q_OTR, DIR = I
+ PORT RFA_RX_ADC_DCS = RFA_RX_ADC_DCS, DIR = O
+ PORT RFA_RX_ADC_DFS = RFA_RX_ADC_DFS, DIR = O
+ PORT RFA_RX_ADC_I_PWDN = RFA_RX_ADC_PWDN, DIR = O
+ PORT RFA_RX_ADC_Q_PWDN = RFA_RX_ADC_PWDN, DIR = O
+ PORT RFB_DAC_I = RFB_DAC_I, DIR = O, VEC = [15:0]
+ PORT RFB_DAC_Q = RFB_DAC_Q, DIR = O, VEC = [15:0]
+ PORT RFB_DAC_SPI_CSn = RFB_DAC_SPI_CSn, DIR = O
+ PORT RFB_DAC_SPI_SCLK = RFB_DAC_SPI_SCLK, DIR = O
+ PORT RFB_DAC_SPI_MOSI = RFB_DAC_SPI_MOSI, DIR = O
+ PORT RFB_DAC_SPI_MISO = RFB_DAC_SPI_MISO, DIR = I
+ PORT RFB_DAC_RESET = RFB_DAC_RESET, DIR = O
+ PORT RFB_DAC_PLLLOCK = RFB_DAC_PLLLOCK, DIR = I
+ PORT RFB_RX_ADC_I = RFB_RX_ADC_I, DIR = I, VEC = [13:0]
+ PORT RFB_RX_ADC_Q = RFB_RX_ADC_Q, DIR = I, VEC = [13:0]
+ PORT RFB_RX_ADC_I_OTR = RFB_RX_ADC_I_OTR, DIR = I
+ PORT RFB_RX_ADC_Q_OTR = RFB_RX_ADC_Q_OTR, DIR = I
+ PORT RFB_RX_ADC_DCS = RFB_RX_ADC_DCS, DIR = O
+ PORT RFB_RX_ADC_DFS = RFB_RX_ADC_DFS, DIR = O
+ PORT RFB_RX_ADC_I_PWDN = RFB_RX_ADC_PWDN, DIR = O
+ PORT RFB_RX_ADC_Q_PWDN = RFB_RX_ADC_PWDN, DIR = O
+# EEPROM I/O
+ PORT RFA_EEPROM_IO = RFA_EEPROM_IO, DIR = IO
+ PORT RFB_EEPROM_IO = RFB_EEPROM_IO, DIR = IO
+ PORT FPGA_EEPROM_IO = FPGA_EEPROM_IO, DIR = IO
+# Clock & Reset
+ PORT clk_1_sys_clk = CLK_S, DIR = I, SIGIS = CLK, CLK_FREQ = 40000000
+ PORT rst_1_sys_rst = sys_rst_s, DIR = I, SIGIS = RST, RST_POLARITY = 1
+# Digital I/O header
+ PORT debughdr = debug_capture_running & debug_transmit_running, DIR = O, VEC = [1:0]
+ PORT debug_sw_gpio = debug_sw_gpio, DIR = IO, VEC = [1:0]
+ PORT trigger_in = trig_0_in & trig_1_in & trig_2_in & trig_3_in, DIR = I, VEC = [0:3]
+ PORT trigger_0_out = trig_2_0_out & trig_3_0_out & trig_4_0_out & trig_5_0_out, DIR = O, VEC = [0:3]
+ PORT trigger_1_out = trig_2_1_out & trig_3_1_out & trig_4_1_out & trig_5_1_out, DIR = O, VEC = [0:3]
+
+
+# Optional Debug Header functionality
+# To switch to 6 SW GPIO pins on the Debug Header:
+# - Change above debug_sw_gpio line to:
+# PORT debug_sw_gpio = debug_sw_gpio, DIR = IO, VEC = [5:0]
+# - Modify the xps_gpio instance and change C_GPIO_WIDTH to 6 GPIOs
+# - Comment out trigger_1_out
+# - Modify the system.ucf file to use the debug_sw_gpio pins instead of the trigger_1_out pins
+# ##############################################################################
+# Processor
+# ##############################################################################
+BEGIN ppc405_virtex4
+ PARAMETER INSTANCE = ppc405_0
+ PARAMETER C_FASTEST_PLB_CLOCK = DPLB0
+ PARAMETER C_IDCR_BASEADDR = 0b0100000000
+ PARAMETER C_IDCR_HIGHADDR = 0b0111111111
+ PARAMETER HW_VER = 2.01.b
+ BUS_INTERFACE DPLB0 = plb
+ BUS_INTERFACE IPLB0 = plb
+ BUS_INTERFACE DSOCM = ppc405_0_docm
+ BUS_INTERFACE ISOCM = ppc405_0_iocm
+ BUS_INTERFACE JTAGPPC = ppc405_0_jtagppc_bus
+ BUS_INTERFACE RESETPPC = ppc_reset_bus
+ PORT CPMC405CLOCK = clk_160_0000MHzDCM0
+END
+
+BEGIN isocm_v10
+ PARAMETER INSTANCE = ppc405_0_iocm
+ PARAMETER C_ISCNTLVALUE = 0xa3
+ PARAMETER HW_VER = 2.00.b
+ PORT ISOCM_Clk = clk_80_0000MHzDCM0
+ PORT SYS_Rst = sys_bus_reset
+END
+
+BEGIN isbram_if_cntlr
+ PARAMETER INSTANCE = ppc405_0_iocm_cntlr
+ PARAMETER HW_VER = 3.00.c
+ PARAMETER C_BASEADDR = 0xffff0000
+ PARAMETER C_HIGHADDR = 0xffffffff
+ BUS_INTERFACE ISOCM = ppc405_0_iocm
+ BUS_INTERFACE DCR_WRITE_PORT = ppc405_0_iocm_cntlr_porta
+ BUS_INTERFACE INSTRN_READ_PORT = ppc405_0_iocm_cntlr_portb
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = ppc405_0_iocm_cntlr_bram
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = ppc405_0_iocm_cntlr_porta
+ BUS_INTERFACE PORTB = ppc405_0_iocm_cntlr_portb
+END
+
+BEGIN dsocm_v10
+ PARAMETER INSTANCE = ppc405_0_docm
+ PARAMETER C_DSCNTLVALUE = 0xa3
+ PARAMETER HW_VER = 2.00.b
+ PORT DSOCM_Clk = clk_80_0000MHzDCM0
+ PORT SYS_Rst = sys_bus_reset
+END
+
+BEGIN dsbram_if_cntlr
+ PARAMETER INSTANCE = ppc405_0_docm_cntlr
+ PARAMETER HW_VER = 3.00.c
+ PARAMETER C_BASEADDR = 0x40110000
+ PARAMETER C_HIGHADDR = 0x4011ffff
+ BUS_INTERFACE DSOCM = ppc405_0_docm
+ BUS_INTERFACE PORTA = ppc405_0_docm_cntlr_porta
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = ppc405_0_docm_cntlr_bram
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = ppc405_0_docm_cntlr_porta
+END
+
+# ##############################################################################
+# Clock / Reset / Debug
+# ##############################################################################
+BEGIN clock_generator
+ PARAMETER INSTANCE = clock_generator_0
+ PARAMETER C_CLKIN_FREQ = 40000000
+ PARAMETER C_CLKOUT0_FREQ = 125000000
+ PARAMETER C_CLKOUT0_PHASE = 0
+ PARAMETER C_CLKOUT0_GROUP = NONE
+ PARAMETER C_CLKOUT0_BUF = TRUE
+ PARAMETER C_CLKOUT1_FREQ = 160000000
+ PARAMETER C_CLKOUT1_PHASE = 0
+ PARAMETER C_CLKOUT1_GROUP = DCM0
+ PARAMETER C_CLKOUT1_BUF = TRUE
+ PARAMETER C_CLKOUT2_FREQ = 200000000
+ PARAMETER C_CLKOUT2_PHASE = 0
+ PARAMETER C_CLKOUT2_GROUP = NONE
+ PARAMETER C_CLKOUT2_BUF = TRUE
+ PARAMETER C_CLKOUT3_FREQ = 40000000
+ PARAMETER C_CLKOUT3_PHASE = 0
+ PARAMETER C_CLKOUT3_GROUP = NONE
+ PARAMETER C_CLKOUT3_BUF = TRUE
+ PARAMETER C_CLKOUT4_FREQ = 80000000
+ PARAMETER C_CLKOUT4_PHASE = 0
+ PARAMETER C_CLKOUT4_GROUP = DCM0
+ PARAMETER C_CLKOUT4_BUF = TRUE
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PARAMETER HW_VER = 4.03.a
+ PORT CLKIN = CLK_S
+ PORT CLKOUT0 = clk_125_0000MHz
+ PORT CLKOUT1 = clk_160_0000MHzDCM0
+ PORT CLKOUT2 = clk_200_0000MHz
+ PORT CLKOUT3 = clk_40_0000MHz
+ PORT CLKOUT4 = clk_80_0000MHzDCM0
+ PORT RST = clk_board_config_config_invalid
+ PORT LOCKED = Dcm_all_locked
+END
+
+BEGIN jtagppc_cntlr
+ PARAMETER INSTANCE = jtagppc_cntlr_inst
+ PARAMETER HW_VER = 2.01.c
+ BUS_INTERFACE JTAGPPC0 = ppc405_0_jtagppc_bus
+END
+
+BEGIN proc_sys_reset
+ PARAMETER INSTANCE = proc_sys_reset_0
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PARAMETER HW_VER = 3.00.a
+ BUS_INTERFACE RESETPPC0 = ppc_reset_bus
+ PORT Slowest_sync_clk = clk_40_0000MHz
+ PORT Ext_Reset_In = sys_rst_s
+ PORT Dcm_locked = Dcm_all_locked
+ PORT Bus_Struct_Reset = sys_bus_reset
+ PORT Peripheral_Reset = sys_periph_reset
+END
+
+# ##############################################################################
+# Interconnect
+# ##############################################################################
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb
+ PARAMETER C_DCR_INTFCE = 0
+ PARAMETER C_NUM_CLK_PLB2OPB_REARB = 100
+ PARAMETER HW_VER = 1.05.a
+ PORT PLB_Clk = clk_80_0000MHzDCM0
+ PORT SYS_Rst = sys_bus_reset
+END
+
+# ##############################################################################
+# Peripherals
+# ##############################################################################
+BEGIN xps_central_dma
+ PARAMETER INSTANCE = xps_central_dma_0
+ PARAMETER HW_VER = 2.03.a
+ PARAMETER C_BASEADDR = 0x81000000
+ PARAMETER C_HIGHADDR = 0x8100FFFF
+ BUS_INTERFACE MPLB = plb
+ BUS_INTERFACE SPLB = plb
+END
+
+BEGIN xps_timer
+ PARAMETER INSTANCE = xps_timer_0
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_BASEADDR = 0x80100000
+ PARAMETER C_HIGHADDR = 0x8010FFFF
+ BUS_INTERFACE SPLB = plb
+END
+
+BEGIN xps_gpio
+ PARAMETER INSTANCE = xps_gpio_0
+ PARAMETER HW_VER = 2.00.a
+# PARAMETER C_GPIO_WIDTH = 6
+ PARAMETER C_GPIO_WIDTH = 2
+ PARAMETER C_BASEADDR = 0x80000000
+ PARAMETER C_HIGHADDR = 0x8000FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT GPIO_IO_O = debug_sw_gpio
+END
+
+BEGIN xps_uartlite
+ PARAMETER INSTANCE = rs232_db9
+ PARAMETER C_BAUDRATE = 57600
+ PARAMETER C_DATA_BITS = 8
+ PARAMETER C_USE_PARITY = 0
+ PARAMETER C_ODD_PARITY = 0
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_BASEADDR = 0x80300000
+ PARAMETER C_HIGHADDR = 0x8030FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT RX = rs232_db9_RX
+ PORT TX = rs232_db9_TX
+END
+
+BEGIN xps_uartlite
+ PARAMETER INSTANCE = rs232_usb
+ PARAMETER C_BAUDRATE = 57600
+ PARAMETER C_DATA_BITS = 8
+ PARAMETER C_USE_PARITY = 0
+ PARAMETER C_ODD_PARITY = 0
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_BASEADDR = 0x80200000
+ PARAMETER C_HIGHADDR = 0x8020FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT RX = rs232_usb_RX
+ PORT TX = rs232_usb_TX
+END
+
+BEGIN xps_bram_if_cntlr
+ PARAMETER INSTANCE = xps_bram_if_cntlr_1
+ PARAMETER C_SPLB_NATIVE_DWIDTH = 64
+ PARAMETER HW_VER = 1.00.b
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x0000ffff
+ BUS_INTERFACE SPLB = plb
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_1_port
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = plb_bram_if_cntlr_1_bram
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_1_port
+END
+
+# ##############################################################################
+# Ethernet
+# ##############################################################################
+BEGIN xps_ll_temac
+ PARAMETER INSTANCE = ETH_A_MAC
+ PARAMETER C_NUM_IDELAYCTRL = 2
+ PARAMETER C_IDELAYCTRL_LOC = IDELAYCTRL_X1Y5-IDELAYCTRL_X1Y6
+ PARAMETER C_PHY_TYPE = 1
+ PARAMETER C_BUS2CORE_CLK_RATIO = 1
+ PARAMETER C_TEMAC_TYPE = 1
+ PARAMETER HW_VER = 2.03.a
+ PARAMETER C_BASEADDR = 0x82100000
+ PARAMETER C_HIGHADDR = 0x8217FFFF
+ PARAMETER C_TEMAC0_TXFIFO = 2048
+ PARAMETER C_TEMAC0_RXFIFO = 2048
+ PARAMETER C_TEMAC0_TXCSUM = 0
+ PARAMETER C_TEMAC0_RXCSUM = 0
+ BUS_INTERFACE SPLB = plb
+ BUS_INTERFACE LLINK0 = ETH_llink0
+ PORT TemacPhy_RST_n = ETH_TemacPhy_RST_n
+ PORT GTX_CLK_0 = clk_125_0000MHz
+ PORT REFCLK = clk_200_0000MHz
+ PORT LlinkTemac0_CLK = clk_80_0000MHzDCM0
+ PORT MII_TX_CLK_0 = ETH_MII_TX_CLK
+ PORT GMII_TXD_0 = ETH_GMII_TXD
+ PORT GMII_TX_EN_0 = ETH_GMII_TX_EN
+ PORT GMII_TX_ER_0 = ETH_GMII_TX_ER
+ PORT GMII_TX_CLK_0 = ETH_GMII_TX_CLK
+ PORT GMII_RXD_0 = ETH_GMII_RXD
+ PORT GMII_RX_DV_0 = ETH_GMII_RX_DV
+ PORT GMII_RX_ER_0 = ETH_GMII_RX_ER
+ PORT GMII_RX_CLK_0 = ETH_GMII_RX_CLK
+ PORT MDC_0 = ETH_MDC
+ PORT MDIO_0 = ETH_MDIO
+END
+
+BEGIN xps_ll_fifo
+ PARAMETER INSTANCE = ETH_A_FIFO
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_BASEADDR = 0x82000000
+ PARAMETER C_HIGHADDR = 0x8200FFFF
+ BUS_INTERFACE SPLB = plb
+ BUS_INTERFACE LLINK = ETH_llink0
+END
+
+# ##############################################################################
+# Mango Cores
+# ##############################################################################
+BEGIN warp_v4_userio
+ PARAMETER INSTANCE = UserIO
+ PARAMETER C_ADDRESS_0 = 0x40
+ PARAMETER C_ADDRESS_1 = 0x42
+ PARAMETER C_I2C_DIVIDER = 0x40
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x80500000
+ PARAMETER C_HIGHADDR = 0x8050FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT LEDs_out = UserIO_LEDs
+ PORT IOEx_SDA = UserIO_IOEx_SDA
+ PORT IOEx_SCL = UserIO_IOEx_SCL
+ PORT PB_in = UserIO_PB
+ PORT DIPSW_in = UserIO_DIPSW
+END
+
+BEGIN clock_board_config
+ PARAMETER INSTANCE = clk_board_config
+ PARAMETER HW_VER = 1.05.a
+ PARAMETER radio_clk_out4_mode = 0x1eff
+ PARAMETER radio_clk_out7_mode = 0x1eff
+ PARAMETER logic_clk_out0_mode = 0x08ff
+ PARAMETER logic_clk_out1_mode = 0x08ff
+ PARAMETER radio_clk_source_sel_mode = 1
+ PARAMETER logic_clk_source_sel_mode = 1
+ PARAMETER fpga_radio_clk_source = 1
+ PARAMETER fpga_logic_clk_source = 1
+ PARAMETER radio_clk_forward_out_mode = 0x08FF
+ PARAMETER logic_clk_forward_out_mode = 0x1EFF
+ PORT sys_clk = clk_board_config_sys_clk
+ PORT sys_rst = net_gnd
+ PORT cfg_radio_dat_out = clk_board_config_radio_dat_out
+ PORT cfg_radio_csb_out = clk_board_config_radio_csb_out
+ PORT cfg_radio_en_out = clk_board_config_radio_en_out
+ PORT cfg_radio_clk_out = clk_board_config_radio_clk_out
+ PORT cfg_logic_dat_out = clk_board_config_logic_dat_out
+ PORT cfg_logic_csb_out = clk_board_config_logic_csb_out
+ PORT cfg_logic_en_out = clk_board_config_logic_en_out
+ PORT cfg_logic_clk_out = clk_board_config_logic_clk_out
+ PORT radio_clk_src_sel = radio2_dipsw_zero
+ PORT logic_clk_src_sel = radio2_dipsw_one
+ PORT config_invalid = clk_board_config_config_invalid
+END
+
+BEGIN util_bus_split
+ PARAMETER INSTANCE = util_bus_split_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_SIZE_IN = 4
+ PARAMETER C_SPLIT = 2
+ PORT Sig = RFA_DIPSW
+ PORT Out1 = radio2_dipsw_zero & radio2_dipsw_one
+END
+
+BEGIN eeprom_onewire
+ PARAMETER INSTANCE = eeprom_controller
+ PARAMETER HW_VER = 1.10.a
+ PARAMETER C_MEM0_BASEADDR = 0x80400000
+ PARAMETER C_MEM0_HIGHADDR = 0x8040FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT DQ0 = FPGA_EEPROM_IO
+ PORT DQ1 = RFA_EEPROM_IO
+ PORT DQ2 = RFB_EEPROM_IO
+ PORT DQ5_I = net_vcc
+ PORT DQ6_I = net_vcc
+ PORT DQ7_I = net_vcc
+END
+
+BEGIN radio_controller
+ PARAMETER INSTANCE = radio_controller_0
+ PARAMETER HW_VER = 2.00.a
+ PARAMETER C_BASEADDR = 0x85000000
+ PARAMETER C_HIGHADDR = 0x8500FFFF
+ BUS_INTERFACE SPLB = plb
+# RFA
+ PORT RFA_TxEn = RFA_TxEn
+ PORT RFA_RxEn = RFA_RxEn
+ PORT RFA_RxHP = RFA_RxHP
+ PORT RFA_SHDN = RFA_SHDN
+ PORT RFA_SPI_SCLK = RFA_SPI_SCLK
+ PORT RFA_SPI_MOSI = RFA_SPI_MOSI
+ PORT RFA_SPI_CSn = RFA_SPI_CSn
+ PORT RFA_B = RFA_B
+ PORT RFA_LD = RFA_LD
+ PORT RFA_PAEn_24 = RFA_PAEn_24
+ PORT RFA_PAEn_5 = RFA_PAEn_5
+ PORT RFA_AntSw = RFA_AntSw
+ PORT RFA_DIPSW = RFA_DIPSW
+ PORT RFA_RSSI_ADC_CLAMP = RFA_RSSI_ADC_CLAMP
+ PORT RFA_RSSI_ADC_HIZ = RFA_RSSI_ADC_HIZ
+ PORT RFA_RSSI_ADC_SLEEP = RFA_RSSI_ADC_SLEEP
+ PORT RFA_DAC_SPI_CSn = RFA_DAC_SPI_CSn
+ PORT RFA_DAC_SPI_SCLK = RFA_DAC_SPI_SCLK
+ PORT RFA_DAC_SPI_MOSI = RFA_DAC_SPI_MOSI
+ PORT RFA_DAC_SPI_MISO = RFA_DAC_SPI_MISO
+ PORT RFA_DAC_RESET = RFA_DAC_RESET
+ PORT RFA_DAC_PLLLOCK = RFA_DAC_PLLLOCK
+ PORT RFA_RX_ADC_DCS = RFA_RX_ADC_DCS
+ PORT RFA_RX_ADC_DFS = RFA_RX_ADC_DFS
+ PORT RFA_RX_ADC_PWDN = RFA_RX_ADC_PWDN
+# RFA - User ports
+ PORT usr_RFA_statLED_Tx = RFA_statLED_Tx
+ PORT usr_RFA_statLED_Rx = RFA_statLED_Rx
+ PORT usr_RFA_RxHP = agc_rxhp_a
+ PORT usr_RFA_RxGainRF = agc_g_rf_a
+ PORT usr_RFA_RxGainBB = agc_g_bb_a
+# RFB
+ PORT RFB_TxEn = RFB_TxEn
+ PORT RFB_RxEn = RFB_RxEn
+ PORT RFB_RxHP = RFB_RxHP
+ PORT RFB_SHDN = RFB_SHDN
+ PORT RFB_SPI_SCLK = RFB_SPI_SCLK
+ PORT RFB_SPI_MOSI = RFB_SPI_MOSI
+ PORT RFB_SPI_CSn = RFB_SPI_CSn
+ PORT RFB_B = RFB_B
+ PORT RFB_LD = RFB_LD
+ PORT RFB_PAEn_24 = RFB_PAEn_24
+ PORT RFB_PAEn_5 = RFB_PAEn_5
+ PORT RFB_AntSw = RFB_AntSw
+ PORT RFB_DIPSW = RFB_DIPSW
+ PORT RFB_RSSI_ADC_CLAMP = RFB_RSSI_ADC_CLAMP
+ PORT RFB_RSSI_ADC_HIZ = RFB_RSSI_ADC_HIZ
+ PORT RFB_RSSI_ADC_SLEEP = RFB_RSSI_ADC_SLEEP
+ PORT RFB_DAC_SPI_CSn = RFB_DAC_SPI_CSn
+ PORT RFB_DAC_SPI_SCLK = RFB_DAC_SPI_SCLK
+ PORT RFB_DAC_SPI_MOSI = RFB_DAC_SPI_MOSI
+ PORT RFB_DAC_SPI_MISO = RFB_DAC_SPI_MISO
+ PORT RFB_DAC_RESET = RFB_DAC_RESET
+ PORT RFB_DAC_PLLLOCK = RFB_DAC_PLLLOCK
+ PORT RFB_RX_ADC_DCS = RFB_RX_ADC_DCS
+ PORT RFB_RX_ADC_DFS = RFB_RX_ADC_DFS
+ PORT RFB_RX_ADC_PWDN = RFB_RX_ADC_PWDN
+# RFB - User ports
+ PORT usr_RFB_statLED_Tx = RFB_statLED_Tx
+ PORT usr_RFB_statLED_Rx = RFB_statLED_Rx
+ PORT usr_RFB_RxHP = agc_rxhp_b
+ PORT usr_RFB_RxGainRF = agc_g_rf_b
+ PORT usr_RFB_RxGainBB = agc_g_bb_b
+END
+
+BEGIN radio_bridge
+ PARAMETER INSTANCE = radio_bridge_RFA
+ PARAMETER HW_VER = 2.00.a
+ PORT samp_clock = clk_40_0000MHz
+ PORT radio_ADC_I = RFA_RX_ADC_I
+ PORT radio_ADC_Q = RFA_RX_ADC_Q
+ PORT radio_DAC_I = RFA_DAC_I
+ PORT radio_DAC_Q = RFA_DAC_Q
+ PORT radio_ADC_I_OTR = RFA_RX_ADC_I_OTR
+ PORT radio_ADC_Q_OTR = RFA_RX_ADC_Q_OTR
+ PORT user_ADC_I = warplab_rfa_Rx_I
+ PORT user_ADC_Q = warplab_rfa_Rx_Q
+ PORT user_DAC_I = warplab_rfa_Tx_I
+ PORT user_DAC_Q = warplab_rfa_Tx_Q
+ PORT radio_RSSI_ADC_D = RFA_RSSI_ADC_D
+ PORT radio_RSSI_ADC_CLK = RFA_RSSI_ADC_CLK
+ PORT user_RSSI_ADC_D = warplab_rfa_rssi
+ PORT user_RSSI_ADC_CLK = warplab_rssi_clk
+END
+
+BEGIN radio_bridge
+ PARAMETER INSTANCE = radio_bridge_RFB
+ PARAMETER HW_VER = 2.00.a
+ PORT samp_clock = clk_40_0000MHz
+ PORT radio_ADC_I = RFB_RX_ADC_I
+ PORT radio_ADC_Q = RFB_RX_ADC_Q
+ PORT radio_DAC_I = RFB_DAC_I
+ PORT radio_DAC_Q = RFB_DAC_Q
+ PORT radio_ADC_I_OTR = RFB_RX_ADC_I_OTR
+ PORT radio_ADC_Q_OTR = RFB_RX_ADC_Q_OTR
+ PORT user_ADC_I = warplab_rfb_Rx_I
+ PORT user_ADC_Q = warplab_rfb_Rx_Q
+ PORT user_DAC_I = warplab_rfb_Tx_I
+ PORT user_DAC_Q = warplab_rfb_Tx_Q
+ PORT radio_RSSI_ADC_D = RFB_RSSI_ADC_D
+ PORT radio_RSSI_ADC_CLK = RFB_RSSI_ADC_CLK
+ PORT user_RSSI_ADC_D = warplab_rfb_rssi
+ PORT user_RSSI_ADC_CLK = warplab_rssi_clk
+END
+
+# ##############################################################################
+# Local Cores
+# ##############################################################################
+BEGIN w2_warplab_trigger_proc_plbw
+ PARAMETER INSTANCE = warplab_trigger_proc
+ PARAMETER HW_VER = 1.04.b
+ PARAMETER C_BASEADDR = 0x84000000
+ PARAMETER C_HIGHADDR = 0x8400FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT sysgen_clk = clk_160_0000MHzDCM0
+ PORT agc_done_in = agc_is_done
+ PORT rfa_rssi = warplab_rfa_rssi
+ PORT rfb_rssi = warplab_rfb_rssi
+ PORT rssi_clk = warplab_rssi_clk
+# Debug header trigger inputs
+ PORT debug_0_in = trig_0_in
+ PORT debug_1_in = trig_1_in
+ PORT debug_2_in = trig_2_in
+ PORT debug_3_in = trig_3_in
+# Trigger outputs to internal modules
+ PORT trig_0_out = baseband_trigger
+ PORT trig_1_out = agc_start
+# Trigger outputs to the debug header
+ PORT trig_2_0_out = trig_2_0_out
+ PORT trig_3_0_out = trig_3_0_out
+ PORT trig_4_0_out = trig_4_0_out
+ PORT trig_5_0_out = trig_5_0_out
+# Replicated trigger outputs to the debug header
+ PORT trig_2_1_out = trig_2_1_out
+ PORT trig_3_1_out = trig_3_1_out
+ PORT trig_4_1_out = trig_4_1_out
+ PORT trig_5_1_out = trig_5_1_out
+END
+
+BEGIN w2_warplab_buffers_plbw
+ PARAMETER INSTANCE = warplab_buffers
+ PARAMETER HW_VER = 3.01.c
+ PARAMETER C_BASEADDR = 0x83000000
+ PARAMETER C_HIGHADDR = 0x833FFFFF
+ BUS_INTERFACE SPLB = plb
+ PORT sysgen_clk = clk_40_0000MHz
+ PORT rssi_adc_clk = warplab_rssi_clk
+ PORT DESIGN_VER = 0x00070501
+ PORT agc_done = agc_is_done
+# RFA
+ PORT rfa_dac_i = warplab_rfa_Tx_I
+ PORT rfa_dac_q = warplab_rfa_Tx_Q
+ PORT rfa_adc_i = warplab_rfa_Rx_I
+ PORT rfa_adc_q = warplab_rfa_Rx_Q
+ PORT rfa_agc_filt_i = dc_filtered_i_a
+ PORT rfa_agc_filt_q = dc_filtered_q_a
+ PORT rfa_rssi = warplab_rfa_rssi
+ PORT rfa_g_bb = agc_g_bb_a
+ PORT rfa_g_rf = agc_g_rf_a
+ PORT rfa_rxhp = agc_rxhp_a
+# RFB
+ PORT rfb_dac_i = warplab_rfb_Tx_I
+ PORT rfb_dac_q = warplab_rfb_Tx_Q
+ PORT rfb_adc_i = warplab_rfb_Rx_I
+ PORT rfb_adc_q = warplab_rfb_Rx_Q
+ PORT rfb_agc_filt_i = dc_filtered_i_b
+ PORT rfb_agc_filt_q = dc_filtered_q_b
+ PORT rfb_rssi = warplab_rfb_rssi
+ PORT rfb_g_bb = agc_g_bb_b
+ PORT rfb_g_rf = agc_g_rf_b
+ PORT rfb_rxhp = agc_rxhp_b
+# Other ports
+ PORT stoptx = net_gnd
+ PORT trigger_in = baseband_trigger
+ PORT capture_running = debug_capture_running
+ PORT transmit_running = debug_transmit_running
+ PORT dram_init_done = net_gnd
+END
+
+BEGIN w2_warplab_agc_plbw
+ PARAMETER INSTANCE = warplab_agc
+ PARAMETER HW_VER = 3.00.b
+ PARAMETER C_BASEADDR = 0x84800000
+ PARAMETER C_HIGHADDR = 0x8480FFFF
+ BUS_INTERFACE SPLB = plb
+ PORT sysgen_clk = clk_80_0000MHzDCM0
+ PORT adc_rx_clk = clk_40_0000MHz
+ PORT agc_run = agc_start
+ PORT agc_done = agc_is_done
+# RFA
+ PORT rfa_agc_rxhp = agc_rxhp_a
+ PORT rfa_agc_g_bb = agc_g_bb_a
+ PORT rfa_agc_g_rf = agc_g_rf_a
+ PORT rfa_rssi = warplab_rfa_rssi
+ PORT rfa_rx_i_in = warplab_rfa_Rx_I
+ PORT rfa_rx_q_in = warplab_rfa_Rx_Q
+ PORT rfa_rx_i_out = dc_filtered_i_a
+ PORT rfa_rx_q_out = dc_filtered_q_a
+# RFB
+ PORT rfb_agc_rxhp = agc_rxhp_b
+ PORT rfb_agc_g_bb = agc_g_bb_b
+ PORT rfb_agc_g_rf = agc_g_rf_b
+ PORT rfb_rssi = warplab_rfb_rssi
+ PORT rfb_rx_i_in = warplab_rfb_Rx_I
+ PORT rfb_rx_q_in = warplab_rfb_Rx_Q
+ PORT rfb_rx_i_out = dc_filtered_i_b
+ PORT rfb_rx_q_out = dc_filtered_q_b
+END
+
